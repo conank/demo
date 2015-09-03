@@ -1,12 +1,8 @@
 package people;
 
-import org.springframework.security.crypto.password.StandardPasswordEncoder;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-import Utils.PasswordEncoder;
 
 /**
  * Created by Pikachu on 9/1/15.
@@ -26,8 +22,7 @@ public class Identity {
     public Identity(String userName, String password, String role) {
         this.userName = userName;
         this.role = role;
-        PasswordEncoder passwordEncoder = new PasswordEncoder();
-        this.password = passwordEncoder.encodePassword(password);
+        this.password = password;
     }
 
     public String getPassword() {

@@ -1,22 +1,25 @@
 package demo;
 
-import java.util.concurrent.atomic.AtomicLong;
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.security.crypto.password.StandardPasswordEncoder;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import people.Identity;
 import people.User;
-//import repository.IdentityRepository;
 import repository.IdentityRepository;
 import repository.UserRepository;
 
+import java.util.concurrent.atomic.AtomicLong;
 
-@RestController
+//import repository.IdentityRepository;
+
+
+@RestController // Note @RestController will return the return value as JSON by default
 public class GreetingController {
 
     private static final String template = "Hello, %s!";
@@ -48,10 +51,13 @@ public class GreetingController {
     }
 
     @RequestMapping(value = "/register")
-    public void registerNewUser(@RequestParam("userName") String userName, @RequestParam("password") String password,
-                                @RequestParam("role") String role) {
-        Identity newUser = new Identity(userName, password, role);
+    public Identity registerNewUser(@RequestParam("userName") String userName, @RequestParam("password") String password,
+                                    @RequestParam("role") String role) {
+        StandardPasswordEncoder standardPasswordEncoder = new StandardPasswordEncoder(env.getProperty("encoder.key"));
+        String encodedPassword = standardPasswordEncoder.encode(password);
+        Identity newUser = new Identity(userName, encodedPassword, role);
         identityRepository.save(newUser);
+        return newUser;
     }
 
     @RequestMapping(value = "/userLogin")
@@ -66,6 +72,7 @@ public class GreetingController {
 
     @RequestMapping("/fuck")
     public String fuck() {
-        return env.getProperty("encoder.key");
+       return "index";
     }
+
 }

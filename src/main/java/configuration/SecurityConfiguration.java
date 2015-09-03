@@ -16,7 +16,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.StandardPasswordEncoder;
-import org.springframework.security.web.util.AntPathRequestMatcher;
 
 import javax.sql.DataSource;
 
@@ -62,8 +61,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .requiresChannel()
                 .antMatchers("/fuck").requiresSecure()
                 .and()
-                .httpBasic().disable(); // To login http://userName:password@localhost:8080/greeting. Note it's impossible for the client to logout.
-//                .csrf().disable();
+                .httpBasic().disable() // To login http://userName:password@localhost:8080/greeting. Note it's impossible for the client to logout.
+                .csrf().disable();
     }
 
 
